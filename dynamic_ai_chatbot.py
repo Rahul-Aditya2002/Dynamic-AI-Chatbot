@@ -327,9 +327,11 @@ from difflib import SequenceMatcher
 
 def simple_retrieval_bot(user_input, cleaned_qa_pairs):
     scores = [(SequenceMatcher(None, user_input.lower(), q.lower()).ratio(), a) for q, a in cleaned_qa_pairs]
+    if not scores:
+        return "Sorry, I don't understand."
     scores.sort(reverse=True)
     best_score, best_answer = scores[0]
-    if best_score > 0.5:   # threshold to avoid random matches
+    if best_score > 0.5:
         return best_answer
     else:
         return "Sorry, I don't understand."
