@@ -61,7 +61,7 @@ print("BOT:", bot_response)
 
 import pandas as pd
 
-df = pd.read_csv(r'20000-Utterances-Training-dataset-for-chatbots-virtual-assistant-Bitext-sample.csv')
+df = pd.read_csv('20000-Utterances-Training-dataset-for-chatbots-virtual-assistant-Bitext-sample.csv')
 print(df.head())
 print(df.columns)
 
