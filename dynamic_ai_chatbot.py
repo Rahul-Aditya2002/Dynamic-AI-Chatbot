@@ -186,7 +186,15 @@ def build_qa_pairs(conv_df, lines_df, max_conversations=500):
     conv_sample = conv_df.head(max_conversations)  # Limit to first N conversations
     for i in range(len(conv_sample)):
         utterance_ids = ast.literal_eval(conv_sample.loc[i, 'utteranceIDs'])
-        texts = [lines_df.loc[lines_df['lineID'] == uid, 'text'].values[0] for uid in utterance_ids]
+        texts = []
+for uid in utterance_ids:
+    match = lines_df.loc[lines_df['lineID'] == uid, 'text']
+    if not match.empty:
+        texts.append(match.values[0])
+    # Optional: else add a placeholder or log missing ID:
+    # else:
+    #     print(f"Warning: lineID {uid} not found in lines_df")
+
         # Pair consecutive utterances
         for j in range(len(texts) - 1):
             qa_pairs.append((texts[j], texts[j + 1]))
