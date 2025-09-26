@@ -169,7 +169,7 @@ print(lines_df.head())
 # In[12]:
 
 
-conversations_path = r'C:\AI_Chatbot_Project\datasets\cornell_movie_dialogs_corpus\cornell movie-dialogs corpus\movie_conversations.txt'
+conversations_path = 'movie_conversations.txt'
 conv_columns = ['character1ID', 'character2ID', 'movieID', 'utteranceIDs']
 conv_df = pd.read_csv(conversations_path, sep=' \+\+\+\$\+\+\+ ', engine='python', names=conv_columns, encoding='utf-8')
 
