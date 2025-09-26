@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
 
 # In[2]:
 
@@ -347,27 +345,30 @@ print("BOT:", bot_response)
 
 # In[22]:
 
+import numpy as np
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
 questions = [q for q, a in cleaned_qa_pairs]
+
+vectorizer = None
+tfidf_matrix = None
 
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
-    
-    def enhanced_retrieval_bot(user_input):
-        user_vec = vectorizer.transform([user_input])
-        cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
-        best_idx = np.argmax(cosine_similarities)
-        best_score = cosine_similarities[best_idx]
-        if best_score > 0.3:
-            return cleaned_qa_pairs[best_idx][1]
-        else:
-            return "Sorry, I don't understand."
-else:
-    vectorizer = None
-    tfidf_matrix = None
 
-    def enhanced_retrieval_bot(user_input):
-        return "Not enough data to initialize vectorizer."
+def enhanced_retrieval_bot(user_input):
+    if vectorizer is None or tfidf_matrix is None:
+        return "Vectorizer not initialized - no questions available."
+    user_vec = vectorizer.transform([user_input])
+    cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
+    best_idx = np.argmax(cosine_similarities)
+    best_score = cosine_similarities[best_idx]
+    if best_score > 0.3:
+        return cleaned_qa_pairs[best_idx][1]
+    else:
+        return "Sorry, I don't understand."
 
 
 def enhanced_retrieval_bot(user_input):
