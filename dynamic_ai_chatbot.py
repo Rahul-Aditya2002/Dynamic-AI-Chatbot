@@ -1,11 +1,12 @@
 import os
 print("Current working directory:", os.getcwd())
 
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 # In[2]:
 
@@ -346,17 +347,12 @@ print("BOT:", bot_response)
 
 # In[22]:
 
-
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-
 questions = [q for q, a in cleaned_qa_pairs]
 
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
-
+    
     def enhanced_retrieval_bot(user_input):
         user_vec = vectorizer.transform([user_input])
         cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
@@ -366,15 +362,12 @@ if questions:
             return cleaned_qa_pairs[best_idx][1]
         else:
             return "Sorry, I don't understand."
-
-    # Optional: testing inside the block
-    # user_message = "How are you doing today?"
-    # bot_response = enhanced_retrieval_bot(user_message)
-    # print("BOT:", bot_response)
-
 else:
+    vectorizer = None
+    tfidf_matrix = None
+
     def enhanced_retrieval_bot(user_input):
-        return "TF-IDF vectorizer not available (no data)."
+        return "Not enough data to initialize vectorizer."
 
 
 def enhanced_retrieval_bot(user_input):
