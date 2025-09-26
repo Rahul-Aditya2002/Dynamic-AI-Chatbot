@@ -139,6 +139,8 @@ print('BOT:', bot_response)
 
 # In[11]:
 
+import requests
+
 file_path = "movie_lines.txt"  # Local filename to save/load
 file_url = "https://drive.google.com/file/d/1BEUp3n4i4XAfDV5vgomolm8jHHagN225/view?usp=sharing"
 
