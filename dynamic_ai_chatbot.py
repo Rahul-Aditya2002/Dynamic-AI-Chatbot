@@ -11,7 +11,7 @@ import seaborn as sns
 # In[2]:
 
 
-file_path = r'C:\AI_Chatbot_Project\datasets\Simple Dialogs for Chatbot\dialogs.txt'
+file_path = 'dialogs.txt'
 
 # Read the file into a list of lines
 with open(file_path, 'r', encoding='utf-8') as f:
