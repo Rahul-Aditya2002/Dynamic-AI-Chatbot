@@ -349,11 +349,17 @@ print("BOT:", bot_response)
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+print(f"Cleaned QA pairs count: {len(cleaned_qa_pairs)}")
+
 questions = [q for q, a in cleaned_qa_pairs]
 
-# Vectorize questions using TF-IDF
-vectorizer = TfidfVectorizer()
-tfidf_matrix = vectorizer.fit_transform(questions)
+if not questions:
+    print("No questions found for vectorization. Check your cleaned_qa_pairs list.")
+    # Optional: Handle empty case here or raise error or skip logic
+else:
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(questions)
 
 def enhanced_retrieval_bot(user_input):
     user_vec = vectorizer.transform([user_input])
