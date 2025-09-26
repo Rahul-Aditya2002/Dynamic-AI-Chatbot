@@ -352,6 +352,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 questions = [q for q, a in cleaned_qa_pairs]
 
+from sklearn.feature_extraction.text import CountVectorizer as countVectorizer
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
