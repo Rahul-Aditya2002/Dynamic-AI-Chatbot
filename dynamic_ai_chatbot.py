@@ -350,7 +350,6 @@ print("BOT:", bot_response)
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-
 questions = [q for q, a in cleaned_qa_pairs]
 
 if questions:
@@ -368,9 +367,19 @@ if questions:
             return cleaned_qa_pairs[best_idx][1]
         else:
             return "Sorry, I don't understand."
+
+    # Testing the enhanced bot (move this INSIDE the if block too!)
+    user_message = "How are you doing today?"
+    bot_response = enhanced_retrieval_bot(user_message)
+    print("BOT:", bot_response)
+
 else:
+    # Define a fallback function. If called, it returns a message.
     def enhanced_retrieval_bot(user_input):
         return "TF-IDF vectorizer not available (no data)."
+
+    # Optionally print or handle that no bot is possible:
+    print("No questions available for vectorizer/test bot.")
 
 
 def enhanced_retrieval_bot(user_input):
