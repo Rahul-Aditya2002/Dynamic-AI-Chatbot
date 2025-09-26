@@ -139,8 +139,17 @@ print('BOT:', bot_response)
 
 # In[11]:
 
+file_path = "movie_lines.txt"  # Local filename to save/load
+file_url = "https://drive.google.com/file/d/1BEUp3n4i4XAfDV5vgomolm8jHHagN225/view?usp=sharing"
 
-lines_path = r'C:\AI_Chatbot_Project\datasets\cornell_movie_dialogs_corpus\cornell movie-dialogs corpus\movie_lines.txt'
+if not os.path.exists(file_path):
+    print("File not found locally. Downloading dataset...")
+    response = requests.get(file_url)
+    with open(file_path, "wb") as f:
+        f.write(response.content)
+    print("Download completed.")
+
+lines_path = file_path
 
 # Parse manually for complete robustness
 data = []
