@@ -354,12 +354,25 @@ print(f"Cleaned QA pairs count: {len(cleaned_qa_pairs)}")
 
 questions = [q for q, a in cleaned_qa_pairs]
 
-if not questions:
-    print("No questions found for vectorization. Check your cleaned_qa_pairs list.")
-    # Optional: Handle empty case here or raise error or skip logic
-else:
+if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
+    import numpy as np
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    def enhanced_retrieval_bot(user_input):
+        user_vec = vectorizer.transform([user_input])
+        cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
+        best_idx = np.argmax(cosine_similarities)
+        best_score = cosine_similarities[best_idx]
+        if best_score > 0.3:
+            return cleaned_qa_pairs[best_idx][1]
+        else:
+            return "Sorry, I don't understand."
+else:
+    def enhanced_retrieval_bot(user_input):
+        return "TF-IDF vectorizer is not initialized due to lack of data."
+
 
 def enhanced_retrieval_bot(user_input):
     user_vec = vectorizer.transform([user_input])
