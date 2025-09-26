@@ -101,7 +101,7 @@ print('BOT:', bot_response)
 # In[8]:
 
 
-df = pd.read_csv(r'Bitext_Sample_Customer_Service_Training_Dataset.csv')
+df = pd.read_csv('Bitext_Sample_Customer_Service_Training_Dataset.csv')
 print(df.head())
 print(df.columns)
 
