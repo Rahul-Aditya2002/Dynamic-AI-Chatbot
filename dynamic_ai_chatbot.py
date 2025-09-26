@@ -350,7 +350,6 @@ print("BOT:", bot_response)
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-print(f"Cleaned QA pairs count: {len(cleaned_qa_pairs)}")
 
 questions = [q for q, a in cleaned_qa_pairs]
 
@@ -371,7 +370,7 @@ if questions:
             return "Sorry, I don't understand."
 else:
     def enhanced_retrieval_bot(user_input):
-        return "TF-IDF vectorizer is not initialized due to lack of data."
+        return "TF-IDF vectorizer not available (no data)."
 
 
 def enhanced_retrieval_bot(user_input):
