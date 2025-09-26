@@ -307,8 +307,15 @@ for q, a in cleaned_qa_pairs[:10]:
 q_lengths = [len(q.split()) for q, a in cleaned_qa_pairs]
 a_lengths = [len(a.split()) for q, a in cleaned_qa_pairs]
 
-print(f"Average question length (words): {sum(q_lengths)/len(q_lengths):.2f}")
-print(f"Average answer length (words): {sum(a_lengths)/len(a_lengths):.2f}")
+if len(q_lengths) > 0:
+    print(f"Average question length (words): {sum(q_lengths)/len(q_lengths):.2f}")
+else:
+    print("No question lengths to calculate average.")
+
+if len(a_lengths) > 0:
+    print(f"Average answer length (words): {sum(a_lengths)/len(a_lengths):.2f}")
+else:
+    print("No answer lengths to calculate average.")
 
 
 # # Basic Retrieval Bot Code
