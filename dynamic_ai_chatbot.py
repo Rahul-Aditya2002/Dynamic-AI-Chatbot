@@ -349,27 +349,30 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Ensure cleaned_qa_pairs is defined and loaded before this
+# Ensure cleaned_qa_pairs is defined and loaded properly before this block
 if 'cleaned_qa_pairs' not in globals() or not cleaned_qa_pairs:
-    # If no data, initialize empty and print/log a warning
     cleaned_qa_pairs = []
-    print("Warning: cleaned_qa_pairs is empty or not defined.")
+    print("Warning: cleaned_qa_pairs is empty or not defined. Please check data loading.")
 
+# Extract only the questions from the Q&A pairs
 questions = [q for q, a in cleaned_qa_pairs]
+print(f"Info: Loaded {len(questions)} questions for vectorizer.")
 
 vectorizer = None
 tfidf_matrix = None
 
+# Initialize vectorizer and matrix if questions are available
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
+    print("Info: Vectorizer and TF-IDF matrix initialized successfully.")
 else:
-    print("Warning: No questions found to initialize vectorizer.")
+    print("Warning: No questions found to initialize the TF-IDF vectorizer.")
 
 def enhanced_retrieval_bot(user_input):
-    # Check if vectorizer and tfidf_matrix are ready before use
+    # Defensive check to avoid 'NoneType' errors
     if vectorizer is None or tfidf_matrix is None:
-        return "Vectorizer not initialized - no questions available. Please check dataset."
+        return "Vectorizer not initialized - no questions available. Please upload or check the dataset."
 
     user_vec = vectorizer.transform([user_input])
     cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
@@ -380,7 +383,6 @@ def enhanced_retrieval_bot(user_input):
         return cleaned_qa_pairs[best_idx][1]
     else:
         return "Sorry, I don't understand."
-
 
 
 def enhanced_retrieval_bot(user_input):
