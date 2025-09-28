@@ -386,7 +386,7 @@ send = st.button("Send")
 
 if send and user_input:
     with st.spinner("🤖 Bot is typing..."):
-        response = smart_context_aware_response(user_input, st.session_state.chat_history)
+        response = enhanced_retrieval_bot(user_input)
         time.sleep(0.5)
     st.session_state.chat_history.append((user_input, response, current_time()))
     st.rerun()  # If available, otherwise use st.experimental_rerun()
