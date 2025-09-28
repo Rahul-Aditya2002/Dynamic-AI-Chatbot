@@ -345,35 +345,45 @@ print("BOT:", bot_response)
 
 # In[22]:
 
+import os
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Ensure cleaned_qa_pairs is defined and loaded properly before this block
-if 'cleaned_qa_pairs' not in globals() or not cleaned_qa_pairs:
-    cleaned_qa_pairs = []
-    print("Warning: cleaned_qa_pairs is empty or not defined. Please check data loading.")
+# Load Q&A pairs function (replace with your real file loading)
+def load_qa_pairs(filepath='dialogs.txt'):
+    if not os.path.exists(filepath):
+        print(f"Warning: {filepath} does not exist!")
+        return []
+    with open(filepath, 'r', encoding='utf-8') as f:
+        lines = f.read().splitlines()
+    # Clean lines and make Q&A pairs
+    dialog_lines = [line for line in lines if line.strip() != '']
+    return [(dialog_lines[i], dialog_lines[i+1]) for i in range(0, len(dialog_lines)-1, 2)]
 
-# Extract only the questions from the Q&A pairs
+# Load cleaned question-answer pairs at runtime
+cleaned_qa_pairs = load_qa_pairs()
+
+# Extract only questions for vectorizer
 questions = [q for q, a in cleaned_qa_pairs]
-print(f"Info: Loaded {len(questions)} questions for vectorizer.")
 
+# Initialize vectorizer and matrix safely
 vectorizer = None
 tfidf_matrix = None
 
-# Initialize vectorizer and matrix if questions are available
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
-    print("Info: Vectorizer and TF-IDF matrix initialized successfully.")
+    print("INFO: Vectorizer initialized successfully.")
 else:
-    print("Warning: No questions found to initialize the TF-IDF vectorizer.")
+    print("WARNING: No questions found - vectorizer NOT initialized.")
 
 def enhanced_retrieval_bot(user_input):
-    # Defensive check to avoid 'NoneType' errors
+    # Defensive: Make sure vectorizer is ready for use
     if vectorizer is None or tfidf_matrix is None:
-        return "Vectorizer not initialized - no questions available. Please upload or check the dataset."
+        return "Error: Chatbot data not loaded correctly. Please check the dataset."
 
+    # Convert user input to vector and find best match
     user_vec = vectorizer.transform([user_input])
     cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
     best_idx = np.argmax(cosine_similarities)
