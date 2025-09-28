@@ -349,6 +349,12 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# Ensure cleaned_qa_pairs is defined and loaded before this
+if 'cleaned_qa_pairs' not in globals() or not cleaned_qa_pairs:
+    # If no data, initialize empty and print/log a warning
+    cleaned_qa_pairs = []
+    print("Warning: cleaned_qa_pairs is empty or not defined.")
+
 questions = [q for q, a in cleaned_qa_pairs]
 
 vectorizer = None
@@ -357,18 +363,24 @@ tfidf_matrix = None
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
+else:
+    print("Warning: No questions found to initialize vectorizer.")
 
 def enhanced_retrieval_bot(user_input):
+    # Check if vectorizer and tfidf_matrix are ready before use
     if vectorizer is None or tfidf_matrix is None:
-        return "Vectorizer not initialized - no questions available."
+        return "Vectorizer not initialized - no questions available. Please check dataset."
+
     user_vec = vectorizer.transform([user_input])
     cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
     best_idx = np.argmax(cosine_similarities)
     best_score = cosine_similarities[best_idx]
+
     if best_score > 0.3:
         return cleaned_qa_pairs[best_idx][1]
     else:
         return "Sorry, I don't understand."
+
 
 
 def enhanced_retrieval_bot(user_input):
