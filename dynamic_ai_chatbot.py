@@ -350,11 +350,11 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Function to load Q&A pairs from dialogs.txt file
+# Function to load dialogs file into QA pairs
 def load_qa_pairs(filepath="dialogs.txt"):
     if not os.path.isfile(filepath):
         print(f"Error: Data file '{filepath}' not found!")
-        return []  # Return empty list if no file
+        return []
 
     with open(filepath, "r", encoding="utf-8") as f:
         lines = f.read().splitlines()
@@ -362,46 +362,39 @@ def load_qa_pairs(filepath="dialogs.txt"):
     # Remove empty lines
     dialog_lines = [line.strip() for line in lines if line.strip() != ""]
 
-    # Check if number of lines is even (pairs of question/answer)
     if len(dialog_lines) % 2 != 0:
-        print("Warning: The dialog file doesn't have an even number of lines. Last line dropped.")
-        dialog_lines = dialog_lines[:-1]  # drop the last odd line
+        print("Warning: Odd number of lines in dialog file; last line will be dropped.")
+        dialog_lines = dialog_lines[:-1]
 
-    # Build pairs (question, answer)
     qa_pairs = [(dialog_lines[i], dialog_lines[i+1]) for i in range(0, len(dialog_lines), 2)]
-
-    # Debug info
     print(f"Loaded {len(qa_pairs)} Q&A pairs from '{filepath}'.")
 
     return qa_pairs
 
-# Load and clean Q&A pairs
+# Load and clean QA pairs at startup
 cleaned_qa_pairs = load_qa_pairs()
 
-# Extract questions to train vectorizer
 questions = [q for q, a in cleaned_qa_pairs]
 
-# Initialize vectorizer and tfidf matrix if questions exist
 vectorizer = None
 tfidf_matrix = None
+
 if questions:
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(questions)
-    print("INFO: Vectorizer and TF-IDF matrix initialized.")
+    print("INFO: Vectorizer successfully initialized with questions.")
 else:
-    print("WARNING: No questions found. Vectorizer NOT initialized.")
+    print("WARNING: No questions available. Chatbot vectorizer not initialized.")
 
-# Chatbot function to generate response
 def enhanced_retrieval_bot(user_input):
     if vectorizer is None or tfidf_matrix is None:
-        return "Error: Chatbot not initialized - please check dataset!"
+        return "Chatbot data not ready. Please check the dialogs dataset."
 
     user_vec = vectorizer.transform([user_input])
     cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
     best_idx = np.argmax(cosine_similarities)
     best_score = cosine_similarities[best_idx]
 
-    # Threshold for matching confidence
     if best_score > 0.3:
         return cleaned_qa_pairs[best_idx][1]
     else:
