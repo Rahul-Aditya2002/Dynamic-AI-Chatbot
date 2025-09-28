@@ -1,7 +1,8 @@
 import streamlit as st
 import time
 from datetime import datetime
-from dynamic_ai_chatbot import smart_context_aware_response
+# from dynamic_ai_chatbot import smart_context_aware_response
+from dynamic_ai_chatbot import enhanced_retrieval_bot
 
 
 st.set_page_config(page_title="Dynamic AI Chatbot", layout="wide")
