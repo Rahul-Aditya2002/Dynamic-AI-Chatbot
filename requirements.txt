@@ -4,3 +4,6 @@ numpy
 matplotlib
 seaborn
 Scikit-learn
+pandas
+seaborn
+perplexity api
