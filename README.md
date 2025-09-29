@@ -13,7 +13,7 @@ Follow these steps to run the app successfully on your local machine:
 
 1. Clone this repository
 bash
-git clone https://github.com/your-username/dynamic-ai-chatbot.git
+git clone https://github.com/Rahul-Aditya2002/Dynamic-AI-Chatbot
 cd dynamic-ai-chatbot
 2. Install dependencies
 Make sure Python 3.7+ is installed, then install required packages:
