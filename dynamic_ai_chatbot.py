@@ -345,61 +345,13 @@ print("BOT:", bot_response)
 
 # In[22]:
 
-import os
-import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-# Function to load dialogs file into QA pairs
-def load_qa_pairs(filepath="dialogs.txt"):
-    if not os.path.isfile(filepath):
-        print(f"Error: Data file '{filepath}' not found!")
-        return []
-
-    with open(filepath, "r", encoding="utf-8") as f:
-        lines = f.read().splitlines()
-
-    # Remove empty lines
-    dialog_lines = [line.strip() for line in lines if line.strip() != ""]
-
-    if len(dialog_lines) % 2 != 0:
-        print("Warning: Odd number of lines in dialog file; last line will be dropped.")
-        dialog_lines = dialog_lines[:-1]
-
-    qa_pairs = [(dialog_lines[i], dialog_lines[i+1]) for i in range(0, len(dialog_lines), 2)]
-    print(f"Loaded {len(qa_pairs)} Q&A pairs from '{filepath}'.")
-
-    return qa_pairs
-
-# Load and clean QA pairs at startup
-cleaned_qa_pairs = load_qa_pairs()
-
 questions = [q for q, a in cleaned_qa_pairs]
 
-vectorizer = None
-tfidf_matrix = None
-
-if questions:
-    vectorizer = TfidfVectorizer()
-    tfidf_matrix = vectorizer.fit_transform(questions)
-    print("INFO: Vectorizer successfully initialized with questions.")
-else:
-    print("WARNING: No questions available. Chatbot vectorizer not initialized.")
-
-def enhanced_retrieval_bot(user_input):
-    if vectorizer is None or tfidf_matrix is None:
-        return "Chatbot data not ready. Please check the dialogs dataset."
-
-    user_vec = vectorizer.transform([user_input])
-    cosine_similarities = cosine_similarity(user_vec, tfidf_matrix).flatten()
-    best_idx = np.argmax(cosine_similarities)
-    best_score = cosine_similarities[best_idx]
-
-    if best_score > 0.3:
-        return cleaned_qa_pairs[best_idx][1]
-    else:
-        return "Sorry, I don't understand."
-
+# Vectorize questions using TF-IDF
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(questions)
 
 def enhanced_retrieval_bot(user_input):
     user_vec = vectorizer.transform([user_input])
