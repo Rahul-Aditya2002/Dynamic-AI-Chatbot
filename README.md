@@ -69,6 +69,21 @@ Deployment to Streamlit Cloud may require additional changes for path and enviro
 
 Feel free to create your own branch for cloud-specific fixes if needed.
 
+Adding API Key and secrets.toml Setup
+This project uses the Perplexity API for enhanced chatbot capabilities. The API key is stored securely in secrets.toml and not included in this repository for security reasons.
+
+To run the app locally using your own Perplexity API key, please follow these steps:
+
+Obtain your API key
+Sign up or log in at Perplexity API provider and get your API key.
+
+Create secrets.toml file in the root directory of this repo on your local machine.
+
+Add your API key inside secrets.toml like this:
+
+PERPLEXITY_API_KEY = "your_actual_api_key_here"
+The app will securely load this key during runtime, allowing the chatbot to access Perplexity services.
+
 Contact / Support
 For questions or issues, please contact:
 
@@ -76,5 +91,4 @@ Rahul Aditya
 Email: adirahul0408@gmail.com
 
 Feel free to reach out if you need help setting this up!
-
 This README gives clear guidance on changes users need to make for file paths and how to run the app locally in VS Code.
